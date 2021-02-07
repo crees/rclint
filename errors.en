@@ -16,6 +16,7 @@ functions_problem	Function incorrectly defined	Functions should not have spaces 
 functions_short	One-line functions discouraged; put command directly in variable	It is wasteful to write a function just for one command.  It is possible to put commands directly inside declarations; name_prestart="install -d -o $name_user /var/run/$name" for example
 
 name_mismatch	Mismatched filename/PROVIDE/$name	Convention dictates that the filename, PROVIDE line and $name should be the same value
+name_unset	Missing name assignment	RC scripts should have a name line
 
 orphaned_line	Orphaned line	Do not put unassociated shell commands inside rc scripts; put them inside functions.  Normally they can go inside a start_precmd function
 
@@ -40,9 +41,6 @@ variables_order	Order of variables incorrect	Order of the variables should be se
 
 value_empty	Empty variable assignment	There is almost never a need to assign an empty value to a variable; sh does not require initialisation.  This line can almost certainly be removed
 value_quoted	Do not quote values unless necessary	Unless there are spaces in the value, quotes are unnecessary.  With the syntax ${variable=value}, value can even contain spaces and does not need quoting
-
-
-
 
 run_rc_followed	run_rc_command line is not the last line in the file	Do not write anything after the run_rc_command line
 run_rc_quoted	Quoted argument to run_rc_command	No need to quote the argument to run_rc_command

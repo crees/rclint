@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2012 Chris Rees. All rights reserved.
+# Copyright (c) 2012-2021 Chris Rees. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -26,15 +26,17 @@
 
 __version__ = '$FreeBSD$'
 
-MAJOR = 0
-MINOR = 2
+MAJOR = 1
+MINOR = 0
 MICRO = 0
 
 DATADIR = '.'
 
 import argparse
 import logging
+import subprocess
 import re
+import sys
 import textwrap
 
 
@@ -66,10 +68,13 @@ class Db:
     def give(self, key, num=-1, level='error'):
         err = self.error(key)
         if err:
+            if level == 'critical':
+                logging.critical('[%d]: %s ' % (num+1, err))
+                exit()
             if level == 'error':
                 logging.error('[%d]: %s ' % (num+1, err))
             if level == 'warn':
-                logging.warn('[%d]: %s ' % (num+1, err))
+                logging.warning('[%d]: %s ' % (num+1, err))
             if verbosity > 0:
                 print((textwrap.fill(self.explanation(key),
                                     initial_indent='==> ',
@@ -85,6 +90,8 @@ class Db:
     def warn(self, key, num=-1, level='warn'):
         self.give(key, num, level)
 
+    def critical(self, key, num=-1):
+        self.give(key, num, 'critical')
 
 class Statement:
     def __init__(self, lines, number):
@@ -138,7 +145,7 @@ class Variable(Statement):
                 self.type = 'longhand'
             else:
                 (self.name, self.value) = result.groups()
-                while self.value[-1] == '\\':
+                while len(self.value) > 0 and self.value[-1] == '\\':
                     self.value = ' '.join((self.value[:-1],
                                            lines[number+self.length]))
                     self.length += 1
@@ -435,7 +442,8 @@ def do_rclint(filename):
             progname = var.get_value()
         elif var.name == 'rcvar':
             try:
-                if progname + '_enable' not in var.value:
+                if (progname + '_enable' not in var.value and
+                        '${name}_enable' in var.value):
                     error.give('rcvar_incorrect', var.line)
             except:
                 error.give('file_order', var.line)
@@ -460,7 +468,10 @@ def do_rclint(filename):
     logging.debug('Checking $name agrees with PROVIDE and filename')
     fn = filename[:-3] if filename[-3:] == '.in' else filename
     fn = fn.split('/')[-1].replace('-', '_')
-    n = get(lineobj['Variable'], 'name').get_value()
+    try:
+        n = get(lineobj['Variable'], 'name').get_value()
+    except (AttributeError):
+        error.critical('name_unset')
     rcordervars = []
     for r in lineobj['Rcorder']:
         if r.type != 'PROVIDE':
@@ -478,8 +489,8 @@ def do_rclint(filename):
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('filenames', nargs='+')
-parser.add_argument('--language', nargs=1, type=str, default=['en'], help='sets the language that errors are reported in')
+parser.add_argument('filename', nargs='+', help="List of filenames, or '.' will scan the current port Makefile for files to check")
+parser.add_argument('--language', nargs=1, type=str, default=['en'], help='sets the language that errors are reported in (available: en)')
 parser.add_argument('-v', action='count', help='raises debug level; provides detailed explanations of errors')
 parser.add_argument('--version', action='version', version='%s.%s.%s-%s' %(MAJOR, MINOR, MICRO, __version__))
 parser.add_argument('-b', action='store_true', help='chooses base RC script mode')
@@ -496,6 +507,16 @@ logging.basicConfig(level=logging.DEBUG if verbosity > 1 else logging.WARN)
 error = Db('errors', args.language[0])
 # problem = Db('problems', args.language[0])
 
-for f in args.filenames:
+filenames=[x for x in args.filename]
+
+if filenames[0] == '.':
+    rcfiles = subprocess.Popen(['make', '-VUSE_RC_SUBR'],
+                                stdout=subprocess.PIPE).communicate()[0].split()
+    if len(rcfiles) == 0:
+        print('No RC files are in the Makefile?')
+        exit()
+    filenames = ['files/' + x.decode(sys.stdout.encoding) + '.in' for x in rcfiles]
+
+for f in filenames:
     print(('Checking %s' % f))
     do_rclint(f)

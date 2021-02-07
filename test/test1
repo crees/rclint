@@ -1,0 +1,21 @@
+#!/bin/sh
+#
+# $FreeBSD$
+#
+# PROVIDE: test1
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name=test1
+rcvar=test1_enable
+desc="This should only error for pointlessly quoted variable"
+
+load_rc_config $name
+
+: ${test1_enable:=no}
+
+pointlessly_quoted="yes"
+
+run_rc_command $1
