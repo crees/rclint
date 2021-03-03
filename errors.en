@@ -6,7 +6,7 @@
 # format as follows:
 error_id	message	explanation
 
-file_order	Order of rc file incorrect	Order of the rc file should be shebang/header/$FreeBSD$/sourcing rc_subr/name/rcvar/load_rc_config/setting defaults/setting other definitions/defining functions.  Do not include unassociated shell commands, and blocks must be separated by single blank lines.  Single blank lines may appear inside the defaults, definitions and functions blocks
+file_order	Order of rc file incorrect	Order of the rc file should be shebang/$FreeBSD$/rcorder/sourcing rc_subr/name/rcvar/load_rc_config/setting defaults/setting other definitions/defining functions.  Do not include unassociated shell commands, and blocks must be separated by single blank lines.  Single blank lines may appear inside the defaults, definitions and functions blocks
 
 functions_chown	Useless use of chown?	Using chown in functions can nearly always be replaced with appropriate use of install(1)
 functions_indent	Unindented function contents	Style dictates that indentation of rc scripts should be tabs.  Ensure that function contents are indented
