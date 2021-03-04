@@ -48,3 +48,6 @@ tarball:
 		sudo cp rclint-${VERSION}.tar.gz /usr/local/www/data/dist/rclint/ &&\
 		scp rclint-${VERSION}.tar.gz freefall.FreeBSD.org:public_distfiles/rclint/; \
 	fi
+
+clean:
+	${RM} -f rclint-*.*.*.tar.gz
