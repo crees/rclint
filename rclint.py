@@ -27,8 +27,8 @@
 __version__ = '$FreeBSD$'
 
 MAJOR = 1
-MINOR = 0
-MICRO = 1
+MINOR = 1
+MICRO = 0
 
 DATADIR = '.'
 
@@ -279,8 +279,9 @@ def do_ports_checking(lineobj, filename):
     logging.debug('Checking for defaults clobbering blank values')
     for var in lineobj['Variable']:
         if var.type in ('longhand', 'shorthand'):
-            if var.name.split('_')[-1] not in ('enable', 'user', 'group',
-                                                'configfile') and var.clobber:
+            if var.name.split('_')[-1] not in (
+                    'enable', 'user', 'group', 'configfile', 'config'
+                                              ) and var.clobber:
                 error.give('variables_defaults_non_mandatory_colon', var.line)
             elif not var.clobber and var.name.split('_')[-1] in ('enable'):
                 error.give('variables_defaults_mandatory_colon', var.line)
