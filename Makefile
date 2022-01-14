@@ -3,7 +3,7 @@
 CP?=	/bin/cp
 CUT?=	/usr/bin/cut
 MKDIR?=	/bin/mkdir
-PYTHON?=/usr/bin/env python
+PYTHON?=/usr/bin/env python3
 RM?=	/bin/rm
 SCRIPT=	rclint.py
 SED?=	/usr/bin/sed
