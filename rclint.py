@@ -24,8 +24,6 @@
 #
 #
 
-__version__ = '$FreeBSD$'
-
 MAJOR = 1
 MINOR = 1
 MICRO = 0
@@ -493,7 +491,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('filename', nargs='+', help="List of filenames, or '.' will scan the current port Makefile for files to check")
 parser.add_argument('--language', nargs=1, type=str, default=['en'], help='sets the language that errors are reported in (available: en)')
 parser.add_argument('-v', action='count', help='raises debug level; provides detailed explanations of errors')
-parser.add_argument('--version', action='version', version='%s.%s.%s-%s' %(MAJOR, MINOR, MICRO, __version__))
+parser.add_argument('--version', action='version', version='%s.%s.%s' %(MAJOR, MINOR, MICRO))
 parser.add_argument('-b', action='store_true', help='chooses base RC script mode')
 parser.add_argument('-p', action='store_true', help='chooses ports RC script mode (default)')
 parser.add_argument('-k', action='store_true', help='tells rclint to carry on reporting even if there are over 10 errors')
