@@ -6,7 +6,7 @@
 # format as follows:
 error_id	message	explanation
 
-file_order	Order of rc file incorrect	Order of the rc file should be shebang/$FreeBSD$/rcorder/sourcing rc_subr/name/rcvar/load_rc_config/setting defaults/setting other definitions/defining functions.  Do not include unassociated shell commands, and blocks must be separated by single blank lines.  Single blank lines may appear inside the defaults, definitions and functions blocks
+file_order	Order of rc file incorrect	Order of the rc file should be shebang/rcorder/sourcing rc_subr/name/rcvar/load_rc_config/setting defaults/setting other definitions/defining functions.  Do not include unassociated shell commands, and blocks must be separated by single blank lines.  Single blank lines may appear inside the defaults, definitions and functions blocks
 
 functions_chown	Useless use of chown?	Using chown in functions can nearly always be replaced with appropriate use of install(1)
 functions_indent	Unindented function contents	Style dictates that indentation of rc scripts should be tabs.  Ensure that function contents are indented
@@ -23,8 +23,6 @@ orphaned_line	Orphaned line	Do not put unassociated shell commands inside rc scr
 rcorder_keyword_freebsd	Do not include FreeBSD in the KEYWORD rcorder line	Historically FreeBSD scripts were marked in the KEYWORD section.  This is no longer necessary
 rcorder_keyword_shutdown	Persistent service?  Needs shutdown KEYWORD	Missing shutdown KEYWORD; if the script starts a service that is persistent, it should have KEYWORD: shutdown in rcorder block
 rcorder_order	rcorder block in the wrong order; should be PROVIDE/REQUIRE/BEFORE/KEYWORD	See the article on RC scripting
-
-rcsid	Missing FreeBSD RCSId keyword	All rc scripts must contain a line beginning # $FreeBSD$.  Do not include blank lines without comment markers at the beginning (#) until the script begins
 
 no_description	No description included	All rc files should include a variable desc="Description of the service"
 

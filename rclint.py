@@ -25,7 +25,7 @@
 #
 
 MAJOR = 1
-MINOR = 1
+MINOR = 2
 MICRO = 0
 
 DATADIR = '.'
@@ -216,16 +216,6 @@ class Rcorder:
             self.value = False
 
 
-class RcsId:
-    def __init__(self, comment):
-        self.line = comment.line
-        result = comment.match(r'# \$Free' + r'BSD([:$].*)')
-        if result:
-            self.value = result[0]
-        else:
-            self.value = False
-
-
 class Function:
     def __init__(self, lines, num):
         if len(lines[0]) > 1 and lines[0][-1] == '{':
@@ -319,15 +309,12 @@ def do_rclint(filename):
         if tmp.value:
             lineobj['Function'].append(tmp)
 
-    lineobj.update({'Rcorder': [], 'RcsId': []})
+    lineobj.update({'Rcorder': []})
 
     for comment in lineobj['Comment']:
         tmp = Rcorder(comment)
         if tmp.value:
             lineobj['Rcorder'].append(tmp)
-        tmp = RcsId(comment)
-        if tmp.value:
-            lineobj['RcsId'] = [tmp]
 
     logging.debug('OK, done collecting variables.  Time to check!')
 
@@ -335,13 +322,9 @@ def do_rclint(filename):
     if lineobj['Shebang'][0].value == False:
         error.give('shebang')
 
-    logging.debug('Checking RcsId')
-    if len(lineobj['RcsId']) < 1:
-        error.give('rcsid')
-
     logging.debug('Checking order of file')
     linenumbers = []
-    for obj in ('Shebang', 'RcsId', 'Rcorder'):
+    for obj in ('Shebang', 'Rcorder'):
         for o in lineobj[obj]:
             linenumbers.append(o.line)
 
