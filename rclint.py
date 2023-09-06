@@ -25,7 +25,7 @@
 #
 
 MAJOR = 1
-MINOR = 2
+MINOR = 3
 MICRO = 0
 
 DATADIR = '.'
@@ -133,7 +133,7 @@ class Variable(Statement):
     def __init__(self, lines, number):
         line = lines[number]
         self.length = 1
-        basic = re.compile(r'([^\s=]+)=(.*)')
+        basic = re.compile(r'^([^#\s=]+)=(.*)')
         result = basic.match(line)
         if result:
             is_longhand = self.is_longhand_default(line)
