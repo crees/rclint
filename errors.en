@@ -38,7 +38,6 @@ variables_defaults_old_style	Prefer condensed version for setting default values
 variables_order	Order of variables incorrect	Order of the variables should be setting defaults then setting other variables
 
 value_empty	Empty variable assignment	There is almost never a need to assign an empty value to a variable; sh does not require initialisation.  This line can almost certainly be removed
-value_quoted	Do not quote values unless necessary	Unless there are spaces in the value, quotes are unnecessary.  With the syntax ${variable=value}, value can even contain spaces and does not need quoting
 
 run_rc_followed	run_rc_command line is not the last line in the file	Do not write anything after the run_rc_command line
 run_rc_quoted	Quoted argument to run_rc_command	No need to quote the argument to run_rc_command
