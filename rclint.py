@@ -25,7 +25,7 @@
 #
 
 MAJOR = 1
-MINOR = 3
+MINOR = 4
 MICRO = 0
 
 DATADIR = '.'
@@ -113,14 +113,6 @@ class Statement:
             return True
         else:
             return False
-
-    def pointless_quoted(self):
-        if not self.quoted():
-            return False
-        for char in self.value[1:-1]:
-            if char in ' \t|%&;<>()$`\\\"\'':
-                return False
-        return True
 
     def get_value(self):
         if self.quoted():
@@ -401,10 +393,7 @@ def do_rclint(filename):
     if sorted(linenumbers) != linenumbers:
         error.give('variables_order')
 
-    logging.debug('Checking for pointless quoting and empty variables')
-    for obj in lineobj['Variable']+lineobj['Statement']:
-        if obj.pointless_quoted():
-            error.give('value_quoted', obj.line)
+    logging.debug('Checking for empty variables')
 
     for v in lineobj['Variable']:
         if v.is_empty():
